@@ -27,6 +27,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 // app.use(sqlinjection);  // add sql-injection middleware here
 
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header(
+      "Access-Control-Allow-Methods",
+      "GET,HEAD,PUT,POST,OPTIONS,UPDATE,DELETE"
+    );
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept, Authorization, token"
+    );
+    next();
+  });
+  
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/sections', sectionsRouter);
