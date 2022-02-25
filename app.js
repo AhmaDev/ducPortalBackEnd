@@ -16,6 +16,7 @@ var fileRouter = require('./routes/file.route');
 var pageRouter = require('./routes/page.route');
 var pageImageRouter = require('./routes/pageImage.route');
 var menuRouter = require('./routes/menu.route');
+var gallaryRouter = require('./routes/gallary.route');
 
 var app = express();
 
@@ -52,5 +53,6 @@ app.use('/files', fileRouter);
 app.use('/pages', pageRouter);
 app.use('/pageImages', pageImageRouter);
 app.use('/menus', menuRouter);
+app.use('/photos', gallaryRouter);
 
 module.exports = app;
