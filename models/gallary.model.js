@@ -6,7 +6,7 @@ const Gallary = function (gallary) {
 };
 
 Gallary.create = function (newGallary, result) {
-    connection.query(`INSERT INTO gallary SET ?`, newFile, (err, res) => {
+    connection.query(`INSERT INTO gallary SET ?`, newGallary, (err, res) => {
         if (err) {
             console.log("Error while adding a gallary", err);
             result(err, null);
