@@ -66,6 +66,7 @@ Menu.findBySectionId = function (id, result) {
             result(err, null);
             return;
         }
+        console.log(res);
         if (res.length == 0) {
             result({ kind: 'not_found' }, null);
         } else {
