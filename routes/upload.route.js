@@ -41,7 +41,7 @@ router.get("/view/:file", function (request, response) {
          response.contentType(contentType);
          response.send(data);
       } else {
-         res.download(tempFile);
+         response.download(tempFile);
       }
 
    });
