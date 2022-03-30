@@ -60,7 +60,7 @@ Menu.findById = function (id, result) {
 };
 
 Menu.findBySectionId = function (id, result) {
-    connection.query(`SELECT * , IFNULL((SELECT JSON_ARRAYAGG(JSON_OBJECT('idMenuContent',idMenuContent,'title',title,'pageId',pageId,'externalLink',externalLink,'isExternalLink', isExternalLink, 'parent' , parent)) FROM menuContent WHERE menuId = menu.idMenu),'[]') As childs FROM menu WHERE sectionId = ${id}`, (err, res) => {
+    connection.query(`SELECT * , IFNULL((SELECT JSON_ARRAYAGG(JSON_OBJECT('idMenuContent',idMenuContent,'title',title,'titleEn',titleEn,'pageId',pageId,'externalLink',externalLink,'isExternalLink', isExternalLink, 'parent' , parent)) FROM menuContent WHERE menuId = menu.idMenu),'[]') As childs FROM menu WHERE sectionId = ${id}`, (err, res) => {
         if (err) {
             console.log("Error while getting menu by ID", err);
             result(err, null);
