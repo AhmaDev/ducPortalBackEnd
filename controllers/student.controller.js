@@ -1,4 +1,5 @@
 const Student = require('../models/student.model');
+
 exports.create = (req, res) => {
     if (!req.body) {
         res.status(400).send({
@@ -10,11 +11,13 @@ exports.create = (req, res) => {
         sectionId: req.body.sectionId,
         level: req.body.level,
     });
+
     Student.create(student, (err, data) => {
         if (err) res.sendStatus(500);
         else res.send(data);
-    });
+    })
 };
+
 exports.findAll = (req, res) => {
     Student.getAll((err, data) => {
         if (err) res.sendStatus(500);
@@ -31,6 +34,8 @@ exports.findOne = (req, res) => {
         else res.send(data);
     })
 };
+
+
 exports.updateOne = (req, res) => {
     Student.update(req.params.id, req.body, (err, data) => {
         if (err) res.sendStatus(500);
