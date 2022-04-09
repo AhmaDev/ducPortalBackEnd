@@ -7,14 +7,28 @@ const Student = function (Student) {
 };
 
 Student.create = (newStudent, result) => {
-    connection.query(`INSERT INTO student SET ?`, newStudent, (err, res) => {
-        if (err) {
-            console.log("Add Student error:", err);
-            result(err, null);
-            return;
+    connection.query(`SELECT * FROM student WHERE email = '${newStudent.email}'`, (err, result) => {
+        if (result.length > 0) {
+            connection.query(`UPDATE student SET ? WHERE idStudent = ${result[0].idStudent}`, newStudent, (err, res) => {
+                if (err) {
+                    console.log("Edit Student error:", err);
+                    result(err, null);
+                    return;
+                }
+                result(null, { idStudent: res.insertId, ...newStudent })
+            })
+        } else {
+            connection.query(`INSERT INTO student SET ?`, newStudent, (err, res) => {
+                if (err) {
+                    console.log("Add Student error:", err);
+                    result(err, null);
+                    return;
+                }
+                result(null, { idStudent: res.insertId, ...newStudent })
+            })
         }
-        result(null, { idStudent: res.insertId, ...newStudent })
-    })
+    });
+
 };
 
 
@@ -32,17 +46,17 @@ Student.findById = (id, result) => {
             return;
         }
         if (res.length == 0) {
-        result({ kind: "not_found" }, null);
+            result({ kind: "not_found" }, null);
         } else {
-          result(null, res[0]);
+            result(null, res[0]);
         }
     })
 };
 
 
 Student.update = (id, Student, result) => {
-        connection.query(`UPDATE student SET ? WHERE idStudent = ${id}`, Student, (err, res) => {
-          if (err) {
+    connection.query(`UPDATE student SET ? WHERE idStudent = ${id}`, Student, (err, res) => {
+        if (err) {
             console.log("Error while editing a Student", err);
             result(err, null);
             return;
