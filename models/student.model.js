@@ -7,7 +7,7 @@ const Student = function (Student) {
 };
 
 Student.create = (newStudent, result) => {
-    connection.query(`INSERT INTO Student SET ?`, newStudent, (err, res) => {
+    connection.query(`INSERT INTO student SET ?`, newStudent, (err, res) => {
         if (err) {
             console.log("Add Student error:", err);
             result(err, null);
@@ -19,13 +19,13 @@ Student.create = (newStudent, result) => {
 
 
 Student.getAll = (result) => {
-    connection.query(`SELECT * FROM Student`, (err, res) => {
+    connection.query(`SELECT * FROM student`, (err, res) => {
         result(null, res);
     });
 };
 
 Student.findById = (id, result) => {
-    connection.query(`SELECT * FROM Student WHERE idStudent = ${id}`, (err, res) => {
+    connection.query(`SELECT * FROM student WHERE idStudent = ${id}`, (err, res) => {
         if (err) {
             console.log("Find By ID: Student error:", err);
             result(err, null);
@@ -41,7 +41,7 @@ Student.findById = (id, result) => {
 
 
 Student.update = (id, Student, result) => {
-        connection.query(`UPDATE Student SET ? WHERE idStudent = ${id}`, Student, (err, res) => {
+        connection.query(`UPDATE student SET ? WHERE idStudent = ${id}`, Student, (err, res) => {
           if (err) {
             console.log("Error while editing a Student", err);
             result(err, null);
@@ -51,7 +51,7 @@ Student.update = (id, Student, result) => {
     })
 }
 Student.delete = (id, result) => {
-    connection.query(`DELETE FROM Student WHERE idStudent = ${id}`, (err, res) => {
+    connection.query(`DELETE FROM student WHERE idStudent = ${id}`, (err, res) => {
         if (err) {
             console.log("Error while deleting a Student", err);
             result(err, null);
