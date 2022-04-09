@@ -15,7 +15,7 @@ Student.create = (newStudent, result) => {
                     result(err, null);
                     return;
                 }
-                result(null, { idStudent: res.insertId, ...newStudent })
+                result(null, { idStudent: result[0].idStudent, ...newStudent })
             })
         } else {
             connection.query(`INSERT INTO student SET ?`, newStudent, (err, res) => {
