@@ -5,12 +5,12 @@ exports.create = (req, res) => {
             message: "Body is empty"
         });
     }
-    const Student = new Student({
+    const student = new Student({
         email: req.body.email,
         sectionId: req.body.sectionId,
         level: req.body.level,
     });
-    Student.create(Student, (err, data) => {
+    Student.create(student, (err, data) => {
         if (err) res.sendStatus(500);
         else res.send(data);
     });
