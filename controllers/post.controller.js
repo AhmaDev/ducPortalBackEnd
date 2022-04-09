@@ -25,6 +25,7 @@ exports.create = (req, res) => {
 };
 
 exports.findAll = (req, res) => {
+    console.log(req.connection);
     Post.getAll((err, data) => {
         if (err) res.sendStatus(500);
         else res.send(data);
