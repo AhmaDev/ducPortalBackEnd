@@ -13,7 +13,8 @@ exports.create = (req, res) => {
     });
 
     Student.create(student, (err, data) => {
-        if (err) res.sendStatus(500);
+        if (err.code === 'ER_DUP_ENTRY') res.sendStatus(409);
+        if (err.code !== 'ER_DUP_ENTRY') res.sendStatus(500);
         else res.send(data);
     })
 };
