@@ -36,6 +36,17 @@ exports.findOne = (req, res) => {
     })
 };
 
+exports.findOneByEmail = (req, res) => {
+    Student.findByEmail(req.params.email, (err, data) => {
+        if (err) {
+            if (err.kind == "not_found") res.sendStatus(404);
+            else res.sendStatus(500);
+        }
+        else res.send(data);
+    })
+};
+
+
 
 exports.updateOne = (req, res) => {
     Student.update(req.params.id, req.body, (err, data) => {

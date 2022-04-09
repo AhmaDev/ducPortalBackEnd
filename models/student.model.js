@@ -44,6 +44,20 @@ Student.findById = function (id, result) {
 };
 
 
+Student.findByEmail = function (email, result) {
+    connection.query(`SELECT * FROM student WHERE email = '${email}'`, (err, res) => {
+        if (err) {
+            console.log("Error while getting Student by Email", err);
+            result(err, null);
+            return;
+        }
+        if (res.length == 0) {
+            result({ kind: 'not_found' }, null);
+        } else {
+            result(null, res[0]);
+        }
+    });
+};
 
 Student.update = function (id, data, result) {
     connection.query(`UPDATE student SET ? WHERE idStudent = ${id}`, data, (err, res) => {
