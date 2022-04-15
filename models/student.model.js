@@ -6,6 +6,7 @@ const Student = function (student) {
     this.email = student.email;
     this.studySectionId = student.studySectionId;
     this.level = student.level;
+    this.studyClass = student.studyClass;
     this.collegeNumber = student.collegeNumber;
     this.gender = student.gender;
 };
@@ -24,7 +25,7 @@ Student.create = function (newStudent, result) {
 Student.multiCreate = function (body, result) {
     connection.query(`DELETE FROM student`, (deleteErr, deleteRes) => {
         connection.query('ALTER TABLE `student` auto_increment = 1', (err2, res2) => {
-            connection.query(`INSERT INTO student (name,enName,email,studySectionId,level,collegeNumber,gender) VALUES ?`, [body], (err, res) => {
+            connection.query(`INSERT INTO student (name,enName,email,studySectionId,level,studyClass,collegeNumber,gender) VALUES ?`, [body], (err, res) => {
                 if (err) {
                     console.log("Error while adding a Student", err);
                     result(err, null);

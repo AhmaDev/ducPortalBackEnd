@@ -12,6 +12,7 @@ exports.create = (req, res) => {
         email: req.body.email,
         studySectionId: req.body.sectionId,
         level: req.body.level,
+        studyClass: req.body.studyClass,
         collegeNumber: req.body.collegeNumber,
         gender: req.body.gender
     });
