@@ -1,13 +1,28 @@
 const connection = require('../helpers/db');
 
 const Student = function (student) {
+    this.name = student.name;
+    this.enName = student.enName;
     this.email = student.email;
-    this.sectionId = student.sectionId;
+    this.studySectionId = student.studySectionId;
     this.level = student.level;
+    this.collegeNumber = student.collegeNumber;
+    this.gender = student.gender;
 };
 
 Student.create = function (newStudent, result) {
     connection.query(`INSERT INTO student SET ?`, newStudent, (err, res) => {
+        if (err) {
+            console.log("Error while adding a Student", err);
+            result(err, null);
+            return;
+        }
+        result(null, { idStudent: res.insertId, ...newStudent });
+    });
+};
+
+Student.multiCreate = function (body, result) {
+    connection.query(`INSERT INTO student (name,enName,email,studySectionId,level,collegeNumber,gender) SET ?`, [body], (err, res) => {
         if (err) {
             console.log("Error while adding a Student", err);
             result(err, null);
@@ -77,7 +92,7 @@ Student.delete = function (id, result) {
             result(err, null);
             return;
         }
-        result(null, {message: `Student ID ${id} has been deleted successfully`});
+        result(null, { message: `Student ID ${id} has been deleted successfully` });
     })
 }
 

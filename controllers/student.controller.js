@@ -7,9 +7,13 @@ exports.create = (req, res) => {
         });
     }
     const student = new Student({
+        name: req.body.name,
+        enName: req.body.enName,
         email: req.body.email,
-        sectionId: req.body.sectionId,
+        studySectionId: req.body.sectionId,
         level: req.body.level,
+        collegeNumber: req.body.collegeNumber,
+        gender: req.body.gender
     });
 
     Student.create(student, (err, data) => {
@@ -24,6 +28,23 @@ exports.create = (req, res) => {
     })
 };
 
+exports.multiCreate = (req, res) => {
+    if (!req.body) {
+        res.status(400).send({
+            message: "Body is empty"
+        });
+    }
+    Student.multiCreate(req.body, (err, data) => {
+        if (err) {
+            if (err.code === 'ER_DUP_ENTRY') {
+                res.sendStatus(409);
+            } else {
+                res.sendStatus(500);
+            }
+        }
+        else res.send(data);
+    })
+};
 exports.findAll = (req, res) => {
     Student.getAll((err, data) => {
         if (err) res.sendStatus(500);
