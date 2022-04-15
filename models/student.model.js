@@ -22,7 +22,7 @@ Student.create = function (newStudent, result) {
 };
 
 Student.multiCreate = function (body, result) {
-    connection.query(`INSERT INTO student (name,enName,email,studySectionId,level,collegeNumber,gender) SET ?`, [body], (err, res) => {
+    connection.query(`INSERT INTO student (name,enName,email,studySectionId,level,collegeNumber,gender) VALUES ?`, [body], (err, res) => {
         if (err) {
             console.log("Error while adding a Student", err);
             result(err, null);
