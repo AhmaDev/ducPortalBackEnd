@@ -40,7 +40,7 @@ Student.multiCreate = function (body, result) {
 };
 
 Student.getAll = function (result) {
-    connection.query(`SELECT * FROM student`, (err, res) => {
+    connection.query(`SELECT student.*, studySection.sectionName FROM student JOIN studySection ON student.studySectionId = studySection.idSection`, (err, res) => {
         if (err) {
             console.log("Error while getting all Students", err);
             result(err, null);
