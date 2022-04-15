@@ -21,27 +21,30 @@ var studentsRouter = require('./routes/student.route');
 
 var app = express();
 
+
+
+
 app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.json({ limit: '500mb' }));
+app.use(express.urlencoded({ limit: '500mb', extended: true, parameterLimit: 50000 }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 // app.use(sqlinjection);  // add sql-injection middleware here
 
 app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header(
-      "Access-Control-Allow-Methods",
-      "GET,HEAD,PUT,POST,OPTIONS,UPDATE,DELETE"
-    );
-    res.header(
-      "Access-Control-Allow-Headers",
-      "Origin, X-Requested-With, Content-Type, Accept, Authorization, token"
-    );
-    next();
-  });
-  
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET,HEAD,PUT,POST,OPTIONS,UPDATE,DELETE"
+  );
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization, token"
+  );
+  next();
+});
+
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
