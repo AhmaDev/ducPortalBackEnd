@@ -59,5 +59,6 @@ app.use('/pageImages', pageImageRouter);
 app.use('/menus', menuRouter);
 app.use('/photos', gallaryRouter);
 app.use('/students', studentsRouter);
+app.use('/', require('./routes/blockReason.route'));
 
 module.exports = app;
