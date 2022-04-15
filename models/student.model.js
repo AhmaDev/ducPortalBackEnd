@@ -67,7 +67,7 @@ Student.findById = function (id, result) {
 
 
 Student.findByEmail = function (email, result) {
-    connection.query(`SELECT * FROM student WHERE email = '${email}'`, (err, res) => {
+    connection.query(`SELECT student.*, studySection.sectionName, blockReason.blockReasonTitle FROM student JOIN studySection ON student.studySectionId = studySection.idSection LEFT JOIN blockReason ON student.blockReasonId = blockReason.idBlockReason WHERE email = '${email}'`, (err, res) => {
         if (err) {
             console.log("Error while getting Student by Email", err);
             result(err, null);
@@ -80,6 +80,8 @@ Student.findByEmail = function (email, result) {
         }
     });
 };
+
+
 
 Student.update = function (id, data, result) {
     connection.query(`UPDATE student SET ? WHERE idStudent = ${id}`, data, (err, res) => {
