@@ -3,8 +3,8 @@ var router = express.Router();
 const upload = require('../controllers/upload.controller');
 const uploader = require('../middlewares/upload.middleware');
 const path = require('path');
-const dirRoot = require('../app')
 const fs = require('fs');
+const dirRoot = require('../app')
 var auth = require('../middlewares/auth.middleware');
 
 router.get('/', auth.roles('Website Editor'), upload.findAll);
