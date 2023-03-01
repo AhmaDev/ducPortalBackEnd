@@ -44,7 +44,7 @@ Student.multiCreate = function (body, result) {
   });
 };
 
-Student.getAll = function (result) {
+Student.getAll = function (queries, result) {
   let query = "";
   let having = "";
   if (queries.collegeNumber != undefined) {

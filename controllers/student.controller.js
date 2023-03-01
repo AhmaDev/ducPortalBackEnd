@@ -45,7 +45,7 @@ exports.multiCreate = (req, res) => {
   });
 };
 exports.findAll = (req, res) => {
-  Student.getAll((err, data) => {
+  Student.getAll(req.query, (err, data) => {
     if (err) res.sendStatus(500);
     else res.send(data);
   });
