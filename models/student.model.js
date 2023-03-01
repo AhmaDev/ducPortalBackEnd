@@ -74,7 +74,7 @@ Student.getAll = function (queries, result) {
 
 Student.findById = function (id, result) {
   connection.query(
-    `SELECT * FROM student WHERE collegeNumber = ${id}`,
+    `SELECT * FROM student JOIN studySection ON studySection.idSection == student.studySectionId WHERE collegeNumber = ${id}`,
     (err, res) => {
       if (err) {
         console.log("Error while getting Student by ID", err);
