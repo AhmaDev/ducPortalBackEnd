@@ -19,6 +19,7 @@ var menuRouter = require("./routes/menu.route");
 var gallaryRouter = require("./routes/gallary.route");
 var studentsRouter = require("./routes/student.route");
 var request = require("request");
+const connection = require("./helpers/db");
 var app = express();
 
 app.use(logger("dev"));
@@ -68,6 +69,12 @@ app.get("/years", (req, res) => {
   request(options, function (error, response, body) {
     if (error) throw new Error(error);
     res.send(body);
+  });
+});
+
+app.get("/studySections", (req, res) => {
+  connection.query("SELECT * FROM studySection", (err, result) => {
+    res.send(result);
   });
 });
 module.exports = app;
