@@ -54,7 +54,7 @@ Student.getAll = function (queries, result) {
     query += `AND ducPortal.student.studySectionId IN (${queries.sectionId})`;
   }
   if (queries.level != undefined) {
-    having = having + ` AND level = ${queries.level}`;
+    query = query + ` AND level = ${queries.level}`;
   }
   if (queries.isBlocked != undefined) {
     query += `AND ducPortal.student.isBlocked = ${queries.isBlocked}`;
