@@ -48,25 +48,19 @@ Student.getAll = function (queries, result) {
   let query = "";
   let having = "";
   if (queries.collegeNumber != undefined) {
-    query += `AND studentPortal.Student.collegeNumber = "${queries.collegeNumber}"`;
+    query += `AND ducPortal.student.collegeNumber = "${queries.collegeNumber}"`;
   }
   if (queries.sectionId != undefined) {
-    query += `AND studentPortal.Student.sectionId IN (${queries.sectionId})`;
-  }
-  if (queries.status != undefined) {
-    query += `AND studentPortal.Student.studentStatusId IN (${queries.status})`;
+    query += `AND ducPortal.student.studySectionId IN (${queries.sectionId})`;
   }
   if (queries.level != undefined) {
-    having = having + ` AND studentLevel = ${queries.level}`;
-  }
-  if (queries.studyClass != undefined) {
-    query += `AND studentPortal.Student.studyClass = "${queries.studyClass}"`;
+    having = having + ` AND level = ${queries.level}`;
   }
   if (queries.isBlocked != undefined) {
-    query += `AND studentPortal.Student.isBlocked = ${queries.isBlocked}`;
+    query += `AND ducPortal.student.isBlocked = ${queries.isBlocked}`;
   }
   connection.query(
-    `SELECT studentPortal.Student.*, (SELECT @level := MAX(level) FROM studentPortal.StudentLevel WHERE studentPortal.StudentLevel.studentId = studentPortal.Student.idStudent LIMIT 1) As studentLevel, studentPortal.StudentImage.*, Section.sectionName FROM studentPortal.Student JOIN studentPortal.Section ON studentPortal.Student.sectionId = studentPortal.Section.idSection LEFT JOIN studentPortal.StudentImage ON studentPortal.StudentImage.studentId = studentPortal.Student.idStudent AND studentPortal.StudentImage.imageTypeId = 1 WHERE 1=1 ${query} GROUP BY studentPortal.Student.idStudent HAVING 1=1 ${having} ORDER BY studentPortal.Student.studentName ASC`,
+    `SELECT * FROM ducPortal.student WHERE 1=1 ${query}`,
     (err, res) => {
       if (err) {
         console.log("Error while getting all Students", err);
