@@ -28,7 +28,7 @@ Student.multiCreate = function (body, result) {
       "ALTER TABLE `student` auto_increment = 1",
       (err2, res2) => {
         connection.query(
-          `INSERT INTO student (name,enName,email,studySectionId,level,studyClass,collegeNumber,gender) VALUES ?`,
+          `INSERT INTO student (name,enName,email,studySectionId,level,studyClass,collegeNumber,gender,password,year) VALUES ?`,
           [body],
           (err, res) => {
             if (err) {
