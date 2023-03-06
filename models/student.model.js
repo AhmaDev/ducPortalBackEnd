@@ -126,6 +126,37 @@ Student.findByEmail = function (email, result) {
   );
 };
 
+Student.addPayment = function (newPayment, result) {
+  connection.query(
+    `INSERT INTO ducApp.studentPayment SET ?`,
+    newPayment,
+    (err, res) => {
+      if (err) console.log(err);
+
+      result(null, { message: "ok" });
+    },
+  );
+};
+
+Student.getStudentPayments = function (id, result) {
+  connection.query(
+    `SELECT *, (SELECT ducApp.paymentType.paymentTypeName FROM ducApp.paymentType WHERE ducApp.paymentType.idPaymentType = ducApp.studentPayment.paymentTypeId) As paymentTypeName, (SELECT ducApp.paymentType.paymentFunction FROM ducApp.paymentType WHERE ducApp.paymentType.idPaymentType = ducApp.studentPayment.paymentTypeId) As paymentFunction FROM ducApp.studentPayment WHERE ducApp.studentPayment.studentCollegeNumber = '${id}'`,
+
+    (err, res) => {
+      if (err) console.log(err);
+
+      result(null, res);
+    },
+  );
+};
+
+Student.paymentTypes = function (result) {
+  connection.query(`SELECT * FROM ducApp.paymentType`, (err, res) => {
+    if (err) console.log(err);
+    result(null, res);
+  });
+};
+
 Student.update = function (id, data, result) {
   connection.query(
     `UPDATE student SET ? WHERE idStudent = ${id}`,

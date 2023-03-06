@@ -50,6 +50,18 @@ exports.findAll = (req, res) => {
     else res.send(data);
   });
 };
+exports.paymentTypes = (req, res) => {
+  Student.paymentTypes((err, data) => {
+    if (err) res.sendStatus(500);
+    else res.send(data);
+  });
+};
+exports.getStudentPayments = (req, res) => {
+  Student.getStudentPayments(req.params.id, (err, data) => {
+    if (err) res.sendStatus(500);
+    else res.send(data);
+  });
+};
 
 exports.findOne = (req, res) => {
   Student.findById(req.params.id, (err, data) => {
@@ -69,6 +81,18 @@ exports.findOneByEmail = (req, res) => {
   });
 };
 
+exports.addPayment = (req, res) => {
+  Student.addPayment(req.body, (err, data) => {
+    if (err) {
+      console.log(err);
+      if (err.code === "ER_DUP_ENTRY") {
+        res.sendStatus(409);
+      } else {
+        res.sendStatus(500);
+      }
+    } else res.send(data);
+  });
+};
 exports.login = (req, res) => {
   Student.login(req.body, (err, data) => {
     if (err) {
