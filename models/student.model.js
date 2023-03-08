@@ -28,7 +28,7 @@ Student.multiCreate = function (body, result) {
   //     "ALTER TABLE `student` auto_increment = 1",
   //     (err2, res2) => {
   connection.query(
-    `INSERT INTO student (name,enName,email,studySectionId,level,studyClass,collegeNumber,gender,password,year) VALUES ?`,
+    `INSERT INTO student (name,enName,email,studySectionId,level,studyClass,collegeNumber,gender,password,year,studyType) VALUES ?`,
     [body],
     (err, res) => {
       if (err) {
@@ -179,7 +179,7 @@ Student.allPayments = function (queries, result) {
   }
 
   connection.query(
-    `SELECT *,@levelTotalPrice := IFNULL((SELECT IFNULL(price,0) FROM ducApp.sectionFee WHERE ducApp.sectionFee.level = ducPortal.student.level AND ducApp.sectionFee.sectionId = ducPortal.student.studySectionId),0) As levelTotalPrice, @totalPaymentIn :=  IFNULL((SELECT SUM(amount) FROM ducApp.studentPayment JOIN ducApp.paymentType ON ducApp.paymentType.idPaymentType = ducApp.studentPayment.paymentTypeId WHERE ducApp.studentPayment.studentCollegeNumber = ducPortal.student.collegeNumber AND ducApp.paymentType.paymentFunction = 'plus'),0) As totalPaymentIn, @totalPaymentOut := IFNULL((SELECT SUM(amount) FROM ducApp.studentPayment JOIN ducApp.paymentType ON ducApp.paymentType.idPaymentType = ducApp.studentPayment.paymentTypeId WHERE ducApp.studentPayment.studentCollegeNumber = ducPortal.student.collegeNumber AND ducApp.paymentType.paymentFunction = 'minus'),0) As totalPaymentOut, IFNULL((@totalPaymentIn - @totalPaymentOut),0) As finalPayment , @percentage := IFNULL((((@totalPaymentIn - @totalPaymentOut) / @levelTotalPrice) * 100),0) As percentage FROM ducPortal.student WHERE 1=1 ${query} HAVING 1=1 ${having}`,
+    `SELECT *,@levelTotalPrice := IFNULL((SELECT IFNULL(IF(ducPortal.student.studyType = 'morning',price,eveningPrice),0) FROM ducApp.sectionFee WHERE ducApp.sectionFee.level = ducPortal.student.level AND ducApp.sectionFee.sectionId = ducPortal.student.studySectionId),0) As levelTotalPrice, @totalPaymentIn :=  IFNULL((SELECT SUM(amount) FROM ducApp.studentPayment JOIN ducApp.paymentType ON ducApp.paymentType.idPaymentType = ducApp.studentPayment.paymentTypeId WHERE ducApp.studentPayment.studentCollegeNumber = ducPortal.student.collegeNumber AND ducApp.paymentType.paymentFunction = 'plus'),0) As totalPaymentIn, @totalPaymentOut := IFNULL((SELECT SUM(amount) FROM ducApp.studentPayment JOIN ducApp.paymentType ON ducApp.paymentType.idPaymentType = ducApp.studentPayment.paymentTypeId WHERE ducApp.studentPayment.studentCollegeNumber = ducPortal.student.collegeNumber AND ducApp.paymentType.paymentFunction = 'minus'),0) As totalPaymentOut, IFNULL((@totalPaymentIn - @totalPaymentOut),0) As finalPayment , @percentage := IFNULL((((@totalPaymentIn - @totalPaymentOut) / @levelTotalPrice) * 100),0) As percentage FROM ducPortal.student WHERE 1=1 ${query} HAVING 1=1 ${having}`,
     (err, res) => {
       if (err) console.log(err);
       if (queries.percentage != undefined) {
