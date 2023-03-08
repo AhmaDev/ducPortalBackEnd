@@ -5,7 +5,7 @@ var auth = require("../middlewares/auth.middleware");
 
 router.get("/", section.findAll);
 router.post("/", auth.roles("Admin"), section.create);
-router.post("/addFee", auth.roles("Admin"), section.createFee);
+router.post("/addFee", auth.roles("all"), section.createFee);
 router.get("/:id", section.findOne);
 router.get("/slug/:id", section.findOneBySlug);
 router.get("/fees/all", section.findAllFees);

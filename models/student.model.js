@@ -23,30 +23,33 @@ Student.create = function (newStudent, result) {
 };
 
 Student.multiCreate = function (body, result) {
-  connection.query(`DELETE FROM student`, (deleteErr, deleteRes) => {
-    connection.query(
-      "ALTER TABLE `student` auto_increment = 1",
-      (err2, res2) => {
-        connection.query(
-          `INSERT INTO student (name,enName,email,studySectionId,level,studyClass,collegeNumber,gender,password,year) VALUES ?`,
-          [body],
-          (err, res) => {
-            if (err) {
-              console.log("Error while adding a Student", err);
-              result(err, null);
-              return;
-            }
-            result(null, "ok");
-          },
-        );
-      },
-    );
-  });
+  // connection.query(`DELETE FROM student`, (deleteErr, deleteRes) => {
+  //   connection.query(
+  //     "ALTER TABLE `student` auto_increment = 1",
+  //     (err2, res2) => {
+  connection.query(
+    `INSERT INTO student (name,enName,email,studySectionId,level,studyClass,collegeNumber,gender,password,year) VALUES ?`,
+    [body],
+    (err, res) => {
+      if (err) {
+        console.log("Error while adding a Student", err);
+        result(err, null);
+        return;
+      }
+      result(null, "ok");
+    },
+  );
+  //     },
+  //   );
+  // });
 };
 
 Student.getAll = function (queries, result) {
   let query = "";
   let having = "";
+  if (queries.name != undefined) {
+    query += `AND ducPortal.student.name LIKE "%${queries.name}%"`;
+  }
   if (queries.collegeNumber != undefined) {
     query += `AND ducPortal.student.collegeNumber = "${queries.collegeNumber}"`;
   }
@@ -140,7 +143,7 @@ Student.addPayment = function (newPayment, result) {
 
 Student.getStudentPayments = function (id, result) {
   connection.query(
-    `SELECT *, (SELECT ducApp.paymentType.paymentTypeName FROM ducApp.paymentType WHERE ducApp.paymentType.idPaymentType = ducApp.studentPayment.paymentTypeId) As paymentTypeName, (SELECT ducApp.paymentType.paymentFunction FROM ducApp.paymentType WHERE ducApp.paymentType.idPaymentType = ducApp.studentPayment.paymentTypeId) As paymentFunction FROM ducApp.studentPayment WHERE ducApp.studentPayment.studentCollegeNumber = '${id}'`,
+    `SELECT *, (SELECT ducApp.paymentType.paymentTypeName FROM ducApp.paymentType WHERE ducApp.paymentType.idPaymentType = ducApp.studentPayment.paymentTypeId) As paymentTypeName, (SELECT ducApp.paymentType.paymentFunction FROM ducApp.paymentType WHERE ducApp.paymentType.idPaymentType = ducApp.studentPayment.paymentTypeId) As paymentFunction, (SELECT userName FROM ducPortal.user WHERE idUser = ducApp.studentPayment.createdBy) As username FROM ducApp.studentPayment WHERE ducApp.studentPayment.studentCollegeNumber = '${id}'`,
 
     (err, res) => {
       if (err) console.log(err);
@@ -155,6 +158,41 @@ Student.paymentTypes = function (result) {
     if (err) console.log(err);
     result(null, res);
   });
+};
+Student.allPayments = function (queries, result) {
+  let query = "";
+  let having = "";
+  if (queries.name != undefined) {
+    query += `AND ducPortal.student.name LIKE "%${queries.name}%"`;
+  }
+  if (queries.collegeNumber != undefined) {
+    query += ` AND ducPortal.student.collegeNumber = "${queries.collegeNumber}"`;
+  }
+  if (queries.sectionId != undefined) {
+    query += ` AND ducPortal.student.studySectionId IN (${queries.sectionId})`;
+  }
+  if (queries.level != undefined) {
+    query = query + ` AND level = ${queries.level}`;
+  }
+  if (queries.isBlocked != undefined) {
+    query += ` AND ducPortal.student.isBlocked = ${queries.isBlocked}`;
+  }
+
+  connection.query(
+    `SELECT *,@levelTotalPrice := IFNULL((SELECT IFNULL(price,0) FROM ducApp.sectionFee WHERE ducApp.sectionFee.level = ducPortal.student.level AND ducApp.sectionFee.sectionId = ducPortal.student.studySectionId),0) As levelTotalPrice, @totalPaymentIn :=  IFNULL((SELECT SUM(amount) FROM ducApp.studentPayment JOIN ducApp.paymentType ON ducApp.paymentType.idPaymentType = ducApp.studentPayment.paymentTypeId WHERE ducApp.studentPayment.studentCollegeNumber = ducPortal.student.collegeNumber AND ducApp.paymentType.paymentFunction = 'plus'),0) As totalPaymentIn, @totalPaymentOut := IFNULL((SELECT SUM(amount) FROM ducApp.studentPayment JOIN ducApp.paymentType ON ducApp.paymentType.idPaymentType = ducApp.studentPayment.paymentTypeId WHERE ducApp.studentPayment.studentCollegeNumber = ducPortal.student.collegeNumber AND ducApp.paymentType.paymentFunction = 'minus'),0) As totalPaymentOut, IFNULL((@totalPaymentIn - @totalPaymentOut),0) As finalPayment , @percentage := IFNULL((((@totalPaymentIn - @totalPaymentOut) / @levelTotalPrice) * 100),0) As percentage FROM ducPortal.student WHERE 1=1 ${query} HAVING 1=1 ${having}`,
+    (err, res) => {
+      if (err) console.log(err);
+      if (queries.percentage != undefined) {
+        if (queries.percentageIs == "moreThan") {
+          res = res.filter((e) => e.percentage >= queries.percentage);
+        }
+        if (queries.percentageIs == "lessThan") {
+          res = res.filter((e) => e.percentage < queries.percentage);
+        }
+      }
+      result(null, res);
+    },
+  );
 };
 
 Student.update = function (id, data, result) {

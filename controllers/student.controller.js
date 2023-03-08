@@ -62,6 +62,12 @@ exports.getStudentPayments = (req, res) => {
     else res.send(data);
   });
 };
+exports.allPayments = (req, res) => {
+  Student.allPayments(req.query, (err, data) => {
+    if (err) res.sendStatus(500);
+    else res.send(data);
+  });
+};
 
 exports.findOne = (req, res) => {
   Student.findById(req.params.id, (err, data) => {
