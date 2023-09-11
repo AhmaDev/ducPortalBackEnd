@@ -45,19 +45,19 @@ app.use(function (req, res, next) {
   next();
 });
 
-app.use("v1/", indexRouter);
-app.use("v1/users", usersRouter);
-app.use("v1/sections", sectionsRouter);
-app.use("v1/lessons", lessonRouter);
-app.use("v1/posts", postRouter);
-app.use("v1/uploads", uploadRouter);
-app.use("v1/staff", staffRouter);
-app.use("v1/files", fileRouter);
-app.use("v1/pages", pageRouter);
-app.use("v1/pageImages", pageImageRouter);
-app.use("v1/menus", menuRouter);
-app.use("v1/photos", gallaryRouter);
-app.use("v1/students", studentsRouter);
+app.use("/v1/", indexRouter);
+app.use("/v1/users", usersRouter);
+app.use("/v1/sections", sectionsRouter);
+app.use("/v1/lessons", lessonRouter);
+app.use("/v1/posts", postRouter);
+app.use("/v1/uploads", uploadRouter);
+app.use("/v1/staff", staffRouter);
+app.use("/v1/files", fileRouter);
+app.use("/v1/pages", pageRouter);
+app.use("/v1/pageImages", pageImageRouter);
+app.use("/v1/menus", menuRouter);
+app.use("/v1/photos", gallaryRouter);
+app.use("/v1/students", studentsRouter);
 // app.use("/", require("./routes/blockReason.route"));
 
 app.get("/years", (req, res) => {
