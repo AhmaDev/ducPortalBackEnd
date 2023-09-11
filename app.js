@@ -51,6 +51,7 @@ app.use("/v1/sections", sectionsRouter);
 app.use("/v1/lessons", lessonRouter);
 app.use("/v1/posts", postRouter);
 app.use("/v1/uploads", uploadRouter);
+app.use("/uploads", uploadRouter);
 app.use("/v1/staff", staffRouter);
 app.use("/v1/files", fileRouter);
 app.use("/v1/pages", pageRouter);
