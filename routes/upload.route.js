@@ -7,12 +7,21 @@ const fs = require("fs");
 const dirRoot = require("../app");
 var auth = require("../middlewares/auth.middleware");
 
-// router.get('/', auth.roles('Website Editor'), upload.findAll);
-// router.post('/', auth.roles('Website Editor'), uploader.array('file', 25), upload.create);
+router.get("/", auth.roles("Website Editor"), upload.findAll);
+router.post(
+  "/",
+  auth.roles("Website Editor"),
+  uploader.array("file", 25),
+  upload.create,
+);
 router.get("/:id", upload.findOne);
-// router.get('/section/:id', auth.roles('Website Editor'), upload.findBySectionId);
-// router.put('/:id', auth.roles('Website Editor'), upload.updateOne);
-// router.delete('/:id', auth.roles('Website Editor'), upload.deleteOne);
+router.get(
+  "/section/:id",
+  auth.roles("Website Editor"),
+  upload.findBySectionId,
+);
+router.put("/:id", auth.roles("Website Editor"), upload.updateOne);
+router.delete("/:id", auth.roles("Website Editor"), upload.deleteOne);
 
 router.get("/view/:file", function (request, response) {
   let file = request.params.file;
